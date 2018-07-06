@@ -5,7 +5,7 @@ class Student
 attr_accessor :name, :grade
 attr_reader :id
 
-  def initialize(name, grade, id=nil)
+  def initialize(id=nil, name, grade)
     @id = id
     @name = name
     @grade = grade
@@ -30,11 +30,17 @@ attr_reader :id
   end
 
   def self.new_from_db(row)
-    new_student = self.new(row[1], row[2], row[0])
+    new_student = self.new
     new_student.id = row[0]
     new_student.name = row[1]
     new_student.grade = row[2]
     new_student
+  end
+
+  def self.find_by_name(name)
+    sql = "SELECT * FROM students WHERE name = ?"
+    result = DB[:conn].execute(sql, name)[0]
+    SONG.new(result[0], result[1], result[2])
   end
 
   def save
