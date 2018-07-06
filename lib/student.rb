@@ -42,6 +42,11 @@ attr_accessor :name, :grade, :id
     Student.new(result[0], result[1], result[2])
   end
 
+  def update
+    sql = "UPDATE students name = ?, grade = ? WHERE name = ?"
+    DB[:conn].execute(sql, self.name, self.album, self.name)
+  end
+
   def save
     if self.id
       self.update
